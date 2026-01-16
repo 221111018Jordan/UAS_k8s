@@ -1,0 +1,50 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        # Gunakan image dari Docker Hub (hasil CI/CD)
+        image: 221111018jordan/be-app:latest 
+        imagePullPolicy: Always # Wajib 'Always' agar update otomatis
+        ports:
+        - containerPort: 4000
+        # --- SYARAT WAJIB HPA (Resource Limits) ---
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "250m"
+        # ------------------------------------------
+        env:
+        - name: DB_HOST
+          value: db
+        - name: DB_USER
+          value: user
+        - name: DB_PASSWORD
+          value: rootpassword123
+        - name: DB_NAME
+          value: todotask_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 4000
