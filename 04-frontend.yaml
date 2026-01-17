@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: 221111018jordan/fe-app:v3
+        image: 221111018jordan/fe-app:v4
         imagePullPolicy: Always
         ports:
         - containerPort: 80
